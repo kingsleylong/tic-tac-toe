@@ -24,24 +24,18 @@ class Board extends React.Component {
   }
 
   render() {
+    // build React components in loops, use array to store a list of components
+    // refer: https://www.delftstack.com/howto/react/for-loop-in-react/#javascript-for-loop
+    let squareRow = [];
+    for (let row = 0; row < 3; row++) {
+      let squares = [];
+      for (let col = 0; col < 3; col++) {
+        squares[col] = this.renderSquare(row * 3 + col);
+      }
+      squareRow[row] = (<div className="board-row">{squares}</div>);
+    }
     return (
-      <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
+      <div>{squareRow}</div>
     );
   }
 }
