@@ -54,6 +54,7 @@ class Game extends React.Component {
       xIsNext: true,
       // the item selected from the move history
       selectedMoveItem: null,
+      sortAsc: true,
     };
   }
 
@@ -66,7 +67,8 @@ class Game extends React.Component {
   }
 
   handleClick(i) {
-    const history = this.state.history.slice(0, this.state.stepNumber + 1);
+    // const history = this.state.history.slice(0, this.state.stepNumber + 1);
+    const history = this.state.history;
     const current = history[history.length - 1];
     const squares = current.squares.slice();
     if (calculateWinner(squares) || squares[i]) {
@@ -88,7 +90,10 @@ class Game extends React.Component {
   }
 
   render() {
-    const history = this.state.history;
+    // sort the history according to the order
+    const history = this.state.sortAsc ?
+      this.state.history :
+      this.state.history.slice(0).reverse();
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
@@ -129,10 +134,26 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <form>
+            <input type="radio" id="html" name="sorting" value="Ascending"
+                   checked={this.state.sortAsc}
+                   onClick={() => this.changeSorting()} />
+            <label htmlFor="html">Ascending</label>
+            <input type="radio" id="css" name="sorting" value="Descending"
+                   checked={!this.state.sortAsc}
+                   onClick={() => this.changeSorting()} />
+            <label htmlFor="css">Descending</label>
+          </form>
+          <ol reversed={!this.state.sortAsc}>{moves}</ol>
         </div>
       </div>
     );
+  }
+
+  changeSorting() {
+    this.setState({
+      sortAsc: !this.state.sortAsc,
+    });
   }
 }
 
