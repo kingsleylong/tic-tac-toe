@@ -58,6 +58,8 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xIsNext: true,
+      // the item selected from the move history
+      selectedMoveItem: null,
     };
   }
 
@@ -65,6 +67,7 @@ class Game extends React.Component {
     this.setState({
       stepNumber: step,
       xIsNext: (step % 2) === 0,
+      selectedMoveItem: step,
     });
   }
 
@@ -97,12 +100,17 @@ class Game extends React.Component {
 
     const moves = history.map((step, move) => {
       // display location of the move
-      const location = move ?
+      let location = move ?
         'Move to (' + step.moveCol + ', ' + step.moveRow + ')  ' :
         '';
-      const desc = move ?
+      let desc = move ?
         'Go to move #' + move :
         'Go to game start';
+      // bold the selected item in the move history
+      if (move && move === this.state.selectedMoveItem) {
+        location = <b>{location}</b>;
+        desc = <b>{desc}</b>;
+      }
       return (
         <li key={move}>
           {location}
