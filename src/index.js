@@ -67,8 +67,7 @@ class Game extends React.Component {
   }
 
   handleClick(i) {
-    // const history = this.state.history.slice(0, this.state.stepNumber + 1);
-    const history = this.state.history;
+    const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
     if (calculateWinner(squares) || squares[i]) {
@@ -90,20 +89,22 @@ class Game extends React.Component {
   }
 
   render() {
-    // sort the history according to the order
-    const history = this.state.sortAsc ?
-      this.state.history :
-      this.state.history.slice(0).reverse();
+    const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
     const moves = history.map((step, move) => {
-      // display location of the move
-      let location = move ?
+      // the index of move history considering the sorting order
+      let moveInOrder = this.state.sortAsc ?
+        move :
+        history.length - move - 1;
+      // display location of the move according to the sorting order
+      let location = moveInOrder ?
         'Move to (' + step.moveCol + ', ' + step.moveRow + ')  ' :
         '';
-      let desc = move ?
-        'Go to move #' + move :
+      // display the time travel button according to the sorting order
+      let desc = moveInOrder ?
+        'Go to move #' + moveInOrder :
         'Go to game start';
       // bold the selected item in the move history
       if (move && move === this.state.selectedMoveItem) {
@@ -134,7 +135,9 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <br />
           <form>
+            <label>Sort move history: </label>
             <input type="radio" id="html" name="sorting" value="Ascending"
                    checked={this.state.sortAsc}
                    onClick={() => this.changeSorting()} />
@@ -152,7 +155,10 @@ class Game extends React.Component {
 
   changeSorting() {
     this.setState({
+      // flip the sorting order
       sortAsc: !this.state.sortAsc,
+      // reverse the history
+      history: this.state.history.slice(0).reverse(),
     });
   }
 }
