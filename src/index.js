@@ -5,7 +5,7 @@ import './index.css';
 function Square(props) {
   return (
     <button
-      className="square"
+      className={props.className}
       onClick={props.onClick}
     >
       {props.value}
@@ -18,6 +18,7 @@ class Board extends React.Component {
     return (
       <Square
         value={this.props.squares[i]}
+        className={this.props.squaresClasses[i]}
         onClick={() => this.props.onClick(i)}
       />
     );
@@ -55,6 +56,7 @@ class Game extends React.Component {
       // the item selected from the move history
       selectedMoveItem: null,
       sortAsc: true,
+      squaresClasses: Array(9).fill('square'),
     };
   }
 
@@ -120,8 +122,12 @@ class Game extends React.Component {
     });
 
     let status;
+    // use the immutable copy of default classes for the squares
+    let squaresClasses = this.state.squaresClasses.slice();
     if (winner) {
-      status = 'Winner: ' + winner;
+      status = 'Winner: ' + winner[0];
+      // inherit a CSS class: https://stackoverflow.com/a/1065479/12328041
+      winner[1].map(key => squaresClasses[key] = 'square square_highlight');
     } else {
       status =  'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
@@ -130,6 +136,7 @@ class Game extends React.Component {
         <div className="game-board">
           <Board
             squares={current.squares}
+            squaresClasses={squaresClasses}
             onClick={(i) => this.handleClick(i)}
           />
         </div>
@@ -177,7 +184,7 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return [squares[a], [a, b, c]];
     }
   }
   return null;
