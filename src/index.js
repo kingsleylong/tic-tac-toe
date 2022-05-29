@@ -107,7 +107,7 @@ class Game extends React.Component {
         'Go to move #' + moveInOrder :
         'Go to game start';
       // bold the selected item in the move history
-      if (move && move === this.state.selectedMoveItem) {
+      if (move === this.state.selectedMoveItem) {
         location = <b>{location}</b>;
         desc = <b>{desc}</b>;
       }
