@@ -129,7 +129,16 @@ class Game extends React.Component {
       // inherit a CSS class: https://stackoverflow.com/a/1065479/12328041
       winner[1].map(key => squaresClasses[key] = 'square square_highlight');
     } else {
-      status =  'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+      // test null: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null
+      // map reduce: https://www.freecodecamp.org/news/javascript-map-reduce-and-filter-explained-with-examples/
+      let emptySquaresCount = current.squares
+        .filter(key => key === null)
+        .reduce(result => result + 1, 0);
+      if (emptySquaresCount === 0) {
+        status = 'Draw game';
+      } else {
+        status =  'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+      }
     }
     return (
       <div className="game">
