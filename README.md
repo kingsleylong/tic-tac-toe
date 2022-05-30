@@ -1,3 +1,8 @@
+# Introduction
+This project is created from the [officail React tutorial](https://reactjs.org/tutorial/tutorial.html). Beside the basic features, the 6 extra features listed in the end are also implemented.
+
+---
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
